@@ -22,7 +22,7 @@ data class ImageCollection(
 	val points: Int,
 	val score: Int,
 	val topic_id: Int,
-	val images: List<ImageData>) {
+	val images: List<ImageData>?) {
 
 	companion object {
 		/**
@@ -61,15 +61,24 @@ data class ImageCollection(
 	}
 
 	/**
+	 * Gets the number of images in this collection.
+	 */
+	fun getNumberOfImages() : Int {
+		return images?.size ?: 0
+	}
+
+	/**
 	 * Gets the URL to download the first image in the collection from.
 	 *
 	 * @return The first image's URL
 	 */
 	fun getImageUrl() : String? {
-		return if (images.isNotEmpty()) {
-			images [0].link
-		} else {
-			null
+		return images?.let {
+			if (it.isNotEmpty()) {
+				it [0].link
+			} else {
+				null
+			}
 		}
 	}
 }
