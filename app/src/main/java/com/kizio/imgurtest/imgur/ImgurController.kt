@@ -3,13 +3,22 @@ package com.kizio.imgurtest.imgur
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.kizio.imgurtest.data.Gallery
+import com.kizio.imgurtest.interfaces.GalleryListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ImgurController : Callback<Gallery> {
+/**
+ * Controller object for initiating a download of images from Imgur.
+ *
+ * @author Graeme Sutherland
+ * @since 10/12/2019
+ * @constructor Creates an instance of ImgurController.
+ * @param listener The [GalleryListener] used to receive the images
+ */
+class ImgurController (private val listener: GalleryListener) : Callback<Gallery> {
 
 	companion object {
 		/**
@@ -60,7 +69,7 @@ class ImgurController : Callback<Gallery> {
 	override fun onResponse(call: Call<Gallery>, response: Response<Gallery>) {
 		if (response.isSuccessful) {
 			response.body()?.let {
-				val gallery = it
+				listener.onReceiveGallery(it.data)
 			}
 		}
 	}
