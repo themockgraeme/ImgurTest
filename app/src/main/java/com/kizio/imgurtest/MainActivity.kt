@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), GalleryListener {
 	override fun onStart() {
 		super.onStart()
 
-		controller.onStart()
+		controller.start()
 	}
 
 	/**

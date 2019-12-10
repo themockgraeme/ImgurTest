@@ -32,7 +32,10 @@ class ImgurController (private val listener: GalleryListener) : Callback<Gallery
 		private const val URL = "https://api.imgur.com"
 	}
 
-	fun onStart() {
+	/**
+	 * Invoked to start the download.
+	 */
+	fun start() {
 		val gson = GsonBuilder()
 			.setLenient()
 			.create()

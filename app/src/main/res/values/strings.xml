@@ -3,4 +3,8 @@
 
 	<string name="filtered_images">Filtered Images</string>
 	<string name="all_images">All Images</string>
+
+	<string name="downloaded_image">Downloaded Image</string>
+
+	<string name="number_images">Number of images: %1$d</string>
 </resources>

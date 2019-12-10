@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.kizio.imgurtest.R
 import com.kizio.imgurtest.data.ImageCollection
+import com.kizio.imgurtest.viewholders.ListItemViewHolder
 import kotlinx.android.synthetic.main.view_list_item.view.*
 
 /**
@@ -37,18 +38,20 @@ class GalleryAdapter(private val context: Context, private val images: List<Imag
 	 */
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 		val imageCollection = getItem(position)
-		val view = if (convertView != null) {
-			convertView
+		val view: View
+		val holder: ListItemViewHolder
+
+		if (convertView?.tag is ListItemViewHolder) {
+			view = convertView
+			holder = view.tag as ListItemViewHolder
 		} else {
 			val inflater = LayoutInflater.from(context)
-
-			inflater.inflate(R.layout.view_list_item, parent, false)
+			view = inflater.inflate(R.layout.view_list_item, parent, false)
+			holder = ListItemViewHolder(view.title, view.date, view.number_of_images, view.image)
+			view.tag = holder
 		}
 
-		view.title.text = imageCollection.title
-		view.date.text = imageCollection.getDate()
-		view.number_of_images.text = imageCollection.getNumberOfImages().toString()
-		view.image.text = imageCollection.getImageUrl()
+		holder.setImageCollection(context, imageCollection)
 
 		return view
 	}
