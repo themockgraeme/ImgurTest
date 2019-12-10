@@ -87,11 +87,15 @@ class GalleryAdapter(private val context: Context, private val images: List<Imag
 
 	/**
 	 * Shows all images in the list.
+	 *
+	 * There's a bit of repeated code in these methods, which I should really fix.
 	 */
 	fun showAllImages() {
 		displayImages.clear()
 
 		displayImages.addAll(images)
+
+		displayImages.sort()
 
 		notifyDataSetChanged()
 	}
@@ -107,6 +111,8 @@ class GalleryAdapter(private val context: Context, private val images: List<Imag
 				displayImages.add(image)
 			}
 		}
+
+		displayImages.sort()
 
 		notifyDataSetChanged()
 	}

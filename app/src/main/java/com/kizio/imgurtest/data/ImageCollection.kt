@@ -16,19 +16,25 @@ import java.util.*
  * @param topic_id An [Int] giving the topic ID for the image
  * @param images A [List] of [ImageData] downloaded from the server
  */
-data class ImageCollection(
+data class ImageCollection (
 	val title: String,
 	val datetime: Long,
 	val points: Int,
 	val score: Int,
 	val topic_id: Int,
-	val images: List<ImageData>?) {
+	val images: List<ImageData>?) : Comparable<ImageCollection> {
 
 	companion object {
 		/**
 		 * The format [String] for generating a human readable date and time.
 		 */
-		private const val DATE_FORMAT = "DD/MM/yyyy hh:mm a"
+		private const val DATE_FORMAT = "dd/MM/yyyy hh:mm a"
+
+		/**
+		 * The Imgur API returns the time in seconds since 1/1/1970, we need to convert it into
+		 * milliseconds for the Java APIs.
+		 */
+		private const val DATE_TO_MILLISECONDS = 1000L
 
 		/**
 		 * A [SimpleDateFormat] used to convert the [datetime] variable into a human readable
@@ -57,7 +63,7 @@ data class ImageCollection(
 	 * @return The [datetime] value as a [String] in the format DD/MM/YYYY h:mm a
 	 */
 	fun getDate() : String {
-		return FORMATTER.format(Date(datetime))
+		return FORMATTER.format(Date(datetime * DATE_TO_MILLISECONDS))
 	}
 
 	/**
@@ -79,6 +85,23 @@ data class ImageCollection(
 			} else {
 				null
 			}
+		}
+	}
+
+	/**
+	 * Compares this object with the specified object for order. Returns zero if this object is
+	 * equal to the specified [other] object, a negative number if it's less than [other], or a
+	 * positive number if it's greater than [other].
+	 *
+	 * @return 0, -1, or 1 as an [Int]
+	 */
+	override fun compareTo(other: ImageCollection): Int {
+		return if (other.datetime == datetime) {
+			0
+		} else if (other.datetime > datetime) {
+			1
+		} else {
+			-1
 		}
 	}
 }
