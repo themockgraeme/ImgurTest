@@ -1,8 +1,7 @@
 package com.kizio.imgurtest.imgur
 
-import android.content.Context
+import android.util.Log
 import com.google.gson.GsonBuilder
-import com.kizio.imgurtest.R
 import com.kizio.imgurtest.data.Gallery
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,17 +11,28 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ImgurController : Callback<Gallery> {
 
-	fun onStart(context: Context) {
-		val clientId = context.getString(R.string.client_id)
+	companion object {
+		/**
+		 * Logging [TAG] for debug messages.
+		 */
+		private val TAG = ImgurController::class.java.name
+
+		/**
+		 * The base [URL] for the Imgur API.
+		 */
+		private const val URL = "https://api.imgur.com"
+	}
+
+	fun onStart() {
 		val gson = GsonBuilder()
 			.setLenient()
 			.create()
 		val retrofit = Retrofit.Builder()
-			.baseUrl(context.getString(R.string.imgur_url))
+			.baseUrl(URL)
 			.addConverterFactory(GsonConverterFactory.create(gson))
 			.build()
 		val imgurService = retrofit.create(ImgurService::class.java)
-		val call = imgurService.getTopImages(clientId)
+		val call = imgurService.getTopImages()
 
 		call.enqueue(this)
 	}
@@ -30,9 +40,12 @@ class ImgurController : Callback<Gallery> {
 	/**
 	 * Invoked when a network exception occurred talking to the server or when an unexpected
 	 * exception occurred creating the request or processing the response.
+	 *
+	 * @param call The [Call] object used to make the request
+	 * @param t The [Throwable] containing the error data
 	 */
 	override fun onFailure(call: Call<Gallery>, t: Throwable) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		Log.e(TAG, "Failed to retrieve image data", t)
 	}
 
 	/**
@@ -40,6 +53,9 @@ class ImgurController : Callback<Gallery> {
 	 *
 	 * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
 	 * Call [Response.isSuccessful] to determine if the response indicates success.
+	 *
+	 * @param call The [Call] object used to make the request
+	 * @param response The [Response] from the server
 	 */
 	override fun onResponse(call: Call<Gallery>, response: Response<Gallery>) {
 		if (response.isSuccessful) {

@@ -16,6 +16,6 @@ class MainActivity : AppCompatActivity() {
 	private fun makeCall() {
 		val controller = ImgurController()
 
-		controller.onStart(this)
+		controller.onStart()
 	}
 }
