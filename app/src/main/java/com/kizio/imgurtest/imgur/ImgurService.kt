@@ -4,6 +4,7 @@ import com.kizio.imgurtest.data.Gallery
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 /**
  * Provides the HTTP API for the Imgur server to access its services.
@@ -18,6 +19,6 @@ interface ImgurService {
 	 * @return A [Call] to access the downloaded data as a [Gallery] object
 	 */
 	@Headers("Authorization: Client-ID 3dd4b5a5d616392")
-	@GET("/3/gallery/top/top")
-	fun getTopImages() : Call<Gallery>
+	@GET("/3/gallery/search/top")
+	fun searchTopImages(@Query("q") query: String) : Call<Gallery>
 }

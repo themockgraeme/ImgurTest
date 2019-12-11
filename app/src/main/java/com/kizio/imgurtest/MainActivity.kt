@@ -1,12 +1,16 @@
 package com.kizio.imgurtest
 
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.kizio.imgurtest.adapters.GalleryAdapter
 import com.kizio.imgurtest.data.ImageCollection
 import com.kizio.imgurtest.imgur.ImgurController
 import com.kizio.imgurtest.interfaces.GalleryListener
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * Main activity for the app.
@@ -30,15 +34,12 @@ class MainActivity : AppCompatActivity(), GalleryListener {
 		super.onCreate(savedInstanceState)
 
 		setContentView(R.layout.activity_main)
-	}
 
-	/**
-	 * Invoked when the activity starts.
-	 */
-	override fun onStart() {
-		super.onStart()
+		search_text.setOnEditorActionListener { _: TextView, _, _ ->
+			doSearch()
 
-		controller.start()
+			true
+		}
 	}
 
 	/**
@@ -62,5 +63,27 @@ class MainActivity : AppCompatActivity(), GalleryListener {
 				adapter.showAllImages()
 			}
 		}
+	}
+
+	/**
+	 * Called when the search button is clicked.
+	 *
+	 * @param view The [View] that was clicked
+	 */
+	fun onSearch(view: View) {
+		doSearch()
+	}
+
+	/**
+	 * Calls the search function from the Imgur API.
+	 */
+	private fun doSearch() {
+		val searchTerm = search_text.text.toString()
+		val view = findViewById<View>(android.R.id.content)
+		val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+
+		controller.search(searchTerm)
 	}
 }

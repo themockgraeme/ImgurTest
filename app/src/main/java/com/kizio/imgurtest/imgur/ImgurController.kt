@@ -35,7 +35,7 @@ class ImgurController (private val listener: GalleryListener) : Callback<Gallery
 	/**
 	 * Invoked to start the download.
 	 */
-	fun start() {
+	fun search(searchTerm: String) {
 		val gson = GsonBuilder()
 			.setLenient()
 			.create()
@@ -44,7 +44,7 @@ class ImgurController (private val listener: GalleryListener) : Callback<Gallery
 			.addConverterFactory(GsonConverterFactory.create(gson))
 			.build()
 		val imgurService = retrofit.create(ImgurService::class.java)
-		val call = imgurService.getTopImages()
+		val call = imgurService.searchTopImages(searchTerm)
 
 		call.enqueue(this)
 	}
