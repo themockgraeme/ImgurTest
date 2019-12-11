@@ -57,11 +57,7 @@ class MainActivity : AppCompatActivity(), GalleryListener {
 		filter_toggle.isChecked = false
 
 		filter_toggle.setOnCheckedChangeListener { _, isChecked ->
-			if (isChecked) {
-				adapter.filterImages()
-			} else {
-				adapter.showAllImages()
-			}
+			adapter.setImagesFiltered(isChecked)
 		}
 	}
 

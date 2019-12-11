@@ -25,7 +25,7 @@ class GalleryAdapter(private val context: Context, private val images: List<Imag
 	private val displayImages = ArrayList<ImageCollection> (images.size)
 
 	init {
-		showAllImages()
+		setImagesFiltered(false)
 	}
 
 	/**
@@ -86,30 +86,21 @@ class GalleryAdapter(private val context: Context, private val images: List<Imag
 	}
 
 	/**
-	 * Shows all images in the list.
+	 * Sets whether to show the filtered images or all images.
 	 *
-	 * There's a bit of repeated code in these methods, which I should really fix.
+	 * @param isFiltered True if the images are filtered. false otherwise
 	 */
-	fun showAllImages() {
+	fun setImagesFiltered(isFiltered: Boolean) {
 		displayImages.clear()
 
-		displayImages.addAll(images)
-
-		displayImages.sort()
-
-		notifyDataSetChanged()
-	}
-
-	/**
-	 * Filters the display images according to the method in the [ImageCollection] class.
-	 */
-	fun filterImages() {
-		displayImages.clear()
-
-		for (image in images) {
-			if (image.showImage()) {
-				displayImages.add(image)
+		if (isFiltered) {
+			for (image in images) {
+				if (image.showImage()) {
+					displayImages.add(image)
+				}
 			}
+		} else {
+			displayImages.addAll(images)
 		}
 
 		displayImages.sort()
